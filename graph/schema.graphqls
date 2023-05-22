@@ -1,0 +1,104 @@
+type Team {
+  id: Int!
+
+  name: String!
+  teamName: String!
+  shortName: String!
+  abbreviation: String!
+
+  locationName: String!
+  venue: Venue!
+
+  division: Division!
+  franchise: Franchise!
+
+  firstYearOfPlay: String!
+  officialSiteUrl: String!
+
+  players: [Player!]!
+
+  active: Boolean!
+}
+
+type Franchise {
+  id: Int!
+  teamName: String!
+  locationName: String!
+  firstSeasonId: Int!
+  mostRecentTeamId: Int!
+}
+
+type Venue {
+  name: String!
+  city: String!
+  timeZone: Timezone!
+}
+
+type Timezone {
+  id: String!
+  offset: Int!
+  tz: String!
+}
+
+type Division {
+    id: Int!
+    name: String!
+    nameShort: String!
+    abbreviation: String!
+    conference: Conference!
+    active: Boolean!
+}
+
+type Conference {
+    id: Int!
+    name: String!
+    nameShort: String!
+    abbreviation: String!
+    active: Boolean!
+}
+
+type Player {
+    id: Int!
+
+    name: Name!
+    number: Int!
+    position: Position!    
+    
+    age: Int!
+    height: String!
+    weight: Int!
+    nationality: String!
+    birth: BirthInfo!
+    
+    captaincy: Captaincy!
+    rookie: Boolean!
+    shootsCatches: String!
+    rosterStatus: String!
+    currentTeam: Team!
+    
+    active: Boolean!
+}
+
+type Name {
+    first: String!
+    last: String!
+}
+
+type BirthInfo {
+    date: String!
+    city: String
+    stateProvince: String
+    country: String!
+}
+
+type Captaincy {
+    captain: Boolean!
+    assistant: Boolean!
+}
+
+type Position {
+    code: String!
+    name: String!
+    type: String!
+    abbreviation: String!
+}
