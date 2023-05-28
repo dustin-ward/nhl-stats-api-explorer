@@ -1,99 +1,86 @@
 type Team {
-  id: Int!
+	id: Int!
 
-  name: String!
-  teamName: String!
-  shortName: String!
-  abbreviation: String!
+	name: String!				""" Edmonton Oilers """
+	teamName: String!			""" Oilers """
+	shortName: String!			""" Edmonton """
+	abbreviation: String!		""" EDM """
+	locationName: String!		""" Edmonton """
+	firstYearOfPlay: Int!		""" 1979 """
+	officialSiteUrl: String!	""" https://www.edmontonoilers.com/ """
 
-  locationName: String!
-  venue: Venue!
+	venue: Venue!
+	division: Division!
+	conference: Conference!
+	franchise: Franchise!
+	roster: [Player!]!
 
-  division: Division!
-  franchise: Franchise!
-
-  firstYearOfPlay: String!
-  officialSiteUrl: String!
-
-  players: [Player!]!
-
-  active: Boolean!
+	active: Boolean!
 }
 
 type Franchise {
-  id: Int!
-  teamName: String!
-  locationName: String!
-  firstSeasonId: Int!
-  mostRecentTeamId: Int!
+	id: Int!
+	teamName: String!			""" Oilers """
+	locationName: String
+	firstSeasonId: Int
+	mostRecentTeamId: Int
 }
 
 type Venue {
-  name: String!
-  city: String!
-  timeZone: Timezone!
+	id: Int!
+	name: String!				""" Rogers Place """
+	city: String!				""" Edmonton """
+	timeZone: Timezone!
 }
 
 type Timezone {
-  id: String!
-  offset: Int!
-  tz: String!
+	id: String!					""" America/Edmonton """
+	offset: Int!				""" -6 """
+	tz: String!
 }
 
 type Division {
     id: Int!
-    name: String!
-    nameShort: String!
-    abbreviation: String!
-    conference: Conference!
-    active: Boolean!
+    name: String!				""" Pacific """
+    nameShort: String!			""" PAC """
+    abbreviation: String!		""" P """
+    conference: Conference
+    active: Boolean
 }
 
 type Conference {
     id: Int!
-    name: String!
-    nameShort: String!
-    abbreviation: String!
-    active: Boolean!
+    name: String!				""" Western """
+    nameShort: String
+    abbreviation: String
+    active: Boolean
 }
 
 type Player {
     id: Int!
-
-    name: Name!
-    number: Int!
-    position: Position!    
+    fullName: String!			""" Ryan Nugent-Hopkins """
+	firstName: String!			""" Ryan """
+	lastName: String!			""" Nugent-Hopkins """
+    primaryNumber: Int!			""" 93 """
+	currentAge: Int!
+	height: String!				""" 6' 0\" """
+	weight: Int!				""" 195 """
     
-    age: Int!
-    height: String!
-    weight: Int!
-    nationality: String!
-    birth: BirthInfo!
-    
-    captaincy: Captaincy!
-    rookie: Boolean!
-    shootsCatches: String!
-    rosterStatus: String!
-    currentTeam: Team!
-    
-    active: Boolean!
-}
+	birthDate: String!
+	birthCity: String
+	birthStateProvince: String
+	birthCountry: String
+	nationality: String!
 
-type Name {
-    first: String!
-    last: String!
-}
-
-type BirthInfo {
-    date: String!
-    city: String
-    stateProvince: String
-    country: String!
-}
-
-type Captaincy {
     captain: Boolean!
-    assistant: Boolean!
+	alternateCaptain: Boolean!
+    shootsCatches: String!		""" L """
+    rosterStatus: String!		""" Y """
+    currentTeam: Int
+	
+	position: Position!
+
+    active: Boolean!
 }
 
 type Position {
