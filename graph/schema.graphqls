@@ -1,13 +1,13 @@
 type Team {
 	id: Int!
 
-	name: String!				""" Edmonton Oilers """
-	teamName: String!			""" Oilers """
-	shortName: String!			""" Edmonton """
-	abbreviation: String!		""" EDM """
-	locationName: String!		""" Edmonton """
-	firstYearOfPlay: Int!		""" 1979 """
-	officialSiteUrl: String!	""" https://www.edmontonoilers.com/ """
+	name: String!
+	teamName: String!			
+	shortName: String!			
+	abbreviation: String!
+	locationName: String!
+	firstYearOfPlay: Int!
+	officialSiteUrl: String!
 
 	venue: Venue!
 	division: Division!
@@ -20,7 +20,7 @@ type Team {
 
 type Franchise {
 	id: Int!
-	teamName: String!			""" Oilers """
+	teamName: String!
 	locationName: String
 	firstSeasonId: Int
 	mostRecentTeamId: Int
@@ -28,29 +28,29 @@ type Franchise {
 
 type Venue {
 	id: Int!
-	name: String!				""" Rogers Place """
-	city: String!				""" Edmonton """
+	name: String!
+	city: String!
 	timeZone: Timezone!
 }
 
 type Timezone {
-	id: String!					""" America/Edmonton """
-	offset: Int!				""" -6 """
+	id: String!
+	offset: Int!
 	tz: String!
 }
 
 type Division {
     id: Int!
-    name: String!				""" Pacific """
-    nameShort: String!			""" PAC """
-    abbreviation: String!		""" P """
+    name: String!
+    nameShort: String!
+    abbreviation: String!
     conference: Conference
     active: Boolean
 }
 
 type Conference {
     id: Int!
-    name: String!				""" Western """
+    name: String!
     nameShort: String
     abbreviation: String
     active: Boolean
@@ -58,13 +58,13 @@ type Conference {
 
 type Player {
     id: Int!
-    fullName: String!			""" Ryan Nugent-Hopkins """
-	firstName: String!			""" Ryan """
-	lastName: String!			""" Nugent-Hopkins """
-    primaryNumber: Int!			""" 93 """
+    fullName: String!
+	firstName: String!
+	lastName: String!
+    primaryNumber: Int!
 	currentAge: Int!
-	height: String!				""" 6' 0\" """
-	weight: Int!				""" 195 """
+	height: String!
+	weight: Int!
     
 	birthDate: String!
 	birthCity: String
@@ -74,8 +74,8 @@ type Player {
 
     captain: Boolean!
 	alternateCaptain: Boolean!
-    shootsCatches: String!		""" L """
-    rosterStatus: String!		""" Y """
+    shootsCatches: String!
+    rosterStatus: String!
     currentTeam: Int
 	
 	position: Position!
