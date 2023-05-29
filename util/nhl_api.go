@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -33,21 +34,42 @@ func queryNHLStats(endpoint string) (any, error) {
 	return data, nil
 }
 
-func GetTeams() ([]*model.Team, error) {
-	teams := make([]*model.Team, 0)
+func GetTeams() (map[int]*model.Team, error) {
+	teams := make(map[int]*model.Team, 0)
 
-	r, err := queryNHLStats("/api/v1/teams?expand=team.roster")
+	data, err := queryNHLStats("/api/v1/teams")
 	if err != nil {
 		return teams, err
 	}
-	data := r.(map[string]any)
 
-	teams_json := data["teams"]
+	// Parse raw JSON for each team
+	teams_json := data.(map[string]any)["teams"]
 	for _,t := range teams_json.([]any) {
-		teams = append(teams, &model.Team{
-			Name: t.(map[string]any)["name"].(string),
-			Abbreviation: t.(map[string]any)["abbreviation"].(string),
-		})
+		t_json := t.(map[string]any)
+		id := (int)(t_json["id"].(float64))
+		teams[id] = &model.Team{
+			ID: (int)(t_json["id"].(float64)),
+			Name: t_json["name"].(string),
+			TeamName: t_json["teamName"].(string),
+			LocationName: t_json["locationName"].(string),
+			ShortName: t_json["shortName"].(string),
+			Abbreviation: t_json["abbreviation"].(string),
+			OfficialSiteURL: t_json["officialSiteUrl"].(string),
+			VenueID: -1,
+			DivisionID: (int)(t_json["division"].(map[string]any)["id"].(float64)),
+			ConferenceID: (int)(t_json["conference"].(map[string]any)["id"].(float64)),
+			FranchiseID: (int)(t_json["franchise"].(map[string]any)["franchiseId"].(float64)),
+			Active: t_json["active"].(bool),
+		}
+
+		// Annoyingly stored as a string instead of int...
+		teams[id].FirstYearOfPlay, _ = strconv.Atoi(t_json["firstYearOfPlay"].(string))
+
+		// Venue id can be nil
+		v := t_json["venue"].(map[string]any)["id"]
+		if v != nil {
+			teams[id].VenueID = (int)(v.(float64))
+		}
 	}
 
 	return teams, nil

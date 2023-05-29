@@ -52,7 +52,7 @@ type ComplexityRoot struct {
 	Division struct {
 		Abbreviation func(childComplexity int) int
 		Active       func(childComplexity int) int
-		Conference   func(childComplexity int) int
+		ConferenceID func(childComplexity int) int
 		ID           func(childComplexity int) int
 		Name         func(childComplexity int) int
 		NameShort    func(childComplexity int) int
@@ -102,10 +102,10 @@ type ComplexityRoot struct {
 	Team struct {
 		Abbreviation    func(childComplexity int) int
 		Active          func(childComplexity int) int
-		Conference      func(childComplexity int) int
-		Division        func(childComplexity int) int
+		ConferenceID    func(childComplexity int) int
+		DivisionID      func(childComplexity int) int
 		FirstYearOfPlay func(childComplexity int) int
-		Franchise       func(childComplexity int) int
+		FranchiseID     func(childComplexity int) int
 		ID              func(childComplexity int) int
 		LocationName    func(childComplexity int) int
 		Name            func(childComplexity int) int
@@ -113,7 +113,7 @@ type ComplexityRoot struct {
 		Roster          func(childComplexity int) int
 		ShortName       func(childComplexity int) int
 		TeamName        func(childComplexity int) int
-		Venue           func(childComplexity int) int
+		VenueID         func(childComplexity int) int
 	}
 
 	Timezone struct {
@@ -194,12 +194,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Division.Active(childComplexity), true
 
-	case "Division.conference":
-		if e.complexity.Division.Conference == nil {
+	case "Division.conference_id":
+		if e.complexity.Division.ConferenceID == nil {
 			break
 		}
 
-		return e.complexity.Division.Conference(childComplexity), true
+		return e.complexity.Division.ConferenceID(childComplexity), true
 
 	case "Division.id":
 		if e.complexity.Division.ID == nil {
@@ -439,19 +439,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Team.Active(childComplexity), true
 
-	case "Team.conference":
-		if e.complexity.Team.Conference == nil {
+	case "Team.conference_id":
+		if e.complexity.Team.ConferenceID == nil {
 			break
 		}
 
-		return e.complexity.Team.Conference(childComplexity), true
+		return e.complexity.Team.ConferenceID(childComplexity), true
 
-	case "Team.division":
-		if e.complexity.Team.Division == nil {
+	case "Team.division_id":
+		if e.complexity.Team.DivisionID == nil {
 			break
 		}
 
-		return e.complexity.Team.Division(childComplexity), true
+		return e.complexity.Team.DivisionID(childComplexity), true
 
 	case "Team.firstYearOfPlay":
 		if e.complexity.Team.FirstYearOfPlay == nil {
@@ -460,12 +460,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Team.FirstYearOfPlay(childComplexity), true
 
-	case "Team.franchise":
-		if e.complexity.Team.Franchise == nil {
+	case "Team.franchise_id":
+		if e.complexity.Team.FranchiseID == nil {
 			break
 		}
 
-		return e.complexity.Team.Franchise(childComplexity), true
+		return e.complexity.Team.FranchiseID(childComplexity), true
 
 	case "Team.id":
 		if e.complexity.Team.ID == nil {
@@ -516,12 +516,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Team.TeamName(childComplexity), true
 
-	case "Team.venue":
-		if e.complexity.Team.Venue == nil {
+	case "Team.venue_id":
+		if e.complexity.Team.VenueID == nil {
 			break
 		}
 
-		return e.complexity.Team.Venue(childComplexity), true
+		return e.complexity.Team.VenueID(childComplexity), true
 
 	case "Timezone.id":
 		if e.complexity.Timezone.ID == nil {
@@ -627,18 +627,18 @@ var sources = []*ast.Source{
 	{Name: "../schema.graphqls", Input: `type Team {
 	id: Int!
 
-	name: String!				""" Edmonton Oilers """
-	teamName: String!			""" Oilers """
-	shortName: String!			""" Edmonton """
-	abbreviation: String!		""" EDM """
-	locationName: String!		""" Edmonton """
-	firstYearOfPlay: Int!		""" 1979 """
-	officialSiteUrl: String!	""" https://www.edmontonoilers.com/ """
+	name: String!
+	teamName: String!			
+	shortName: String!			
+	abbreviation: String!
+	locationName: String!
+	firstYearOfPlay: Int!
+	officialSiteUrl: String!
 
-	venue: Venue!
-	division: Division!
-	conference: Conference!
-	franchise: Franchise!
+	venue_id: Int!
+	division_id: Int!
+	conference_id: Int!
+	franchise_id: Int!
 	roster: [Player!]!
 
 	active: Boolean!
@@ -646,51 +646,51 @@ var sources = []*ast.Source{
 
 type Franchise {
 	id: Int!
-	teamName: String!			""" Oilers """
-	locationName: String
-	firstSeasonId: Int
-	mostRecentTeamId: Int
+	teamName: String!
+	locationName: String!
+	firstSeasonId: Int!
+	mostRecentTeamId: Int!
 }
 
 type Venue {
 	id: Int!
-	name: String!				""" Rogers Place """
-	city: String!				""" Edmonton """
+	name: String!
+	city: String!
 	timeZone: Timezone!
 }
 
 type Timezone {
-	id: String!					""" America/Edmonton """
-	offset: Int!				""" -6 """
+	id: String!
+	offset: Int!
 	tz: String!
 }
 
 type Division {
     id: Int!
-    name: String!				""" Pacific """
-    nameShort: String!			""" PAC """
-    abbreviation: String!		""" P """
-    conference: Conference
-    active: Boolean
+    name: String!
+    nameShort: String!
+    abbreviation: String!
+	conference_id: Int!
+    active: Boolean!
 }
 
 type Conference {
     id: Int!
-    name: String!				""" Western """
-    nameShort: String
-    abbreviation: String
-    active: Boolean
+    name: String!
+    nameShort: String!
+    abbreviation: String!
+    active: Boolean!
 }
 
 type Player {
     id: Int!
-    fullName: String!			""" Ryan Nugent-Hopkins """
-	firstName: String!			""" Ryan """
-	lastName: String!			""" Nugent-Hopkins """
-    primaryNumber: Int!			""" 93 """
+    fullName: String!
+	firstName: String!
+	lastName: String!
+    primaryNumber: Int!
 	currentAge: Int!
-	height: String!				""" 6' 0\" """
-	weight: Int!				""" 195 """
+	height: String!
+	weight: Int!
     
 	birthDate: String!
 	birthCity: String
@@ -700,8 +700,8 @@ type Player {
 
     captain: Boolean!
 	alternateCaptain: Boolean!
-    shootsCatches: String!		""" L """
-    rosterStatus: String!		""" Y """
+    shootsCatches: String!
+    rosterStatus: String!
     currentTeam: Int
 	
 	position: Position!
@@ -885,11 +885,14 @@ func (ec *executionContext) _Conference_nameShort(ctx context.Context, field gra
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Conference_nameShort(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -926,11 +929,14 @@ func (ec *executionContext) _Conference_abbreviation(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Conference_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -967,11 +973,14 @@ func (ec *executionContext) _Conference_active(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Conference_active(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1163,8 +1172,8 @@ func (ec *executionContext) fieldContext_Division_abbreviation(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Division_conference(ctx context.Context, field graphql.CollectedField, obj *model.Division) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Division_conference(ctx, field)
+func (ec *executionContext) _Division_conference_id(ctx context.Context, field graphql.CollectedField, obj *model.Division) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Division_conference_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1177,40 +1186,31 @@ func (ec *executionContext) _Division_conference(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Conference, nil
+		return obj.ConferenceID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Conference)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOConference2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐConference(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Division_conference(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Division_conference_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Division",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Conference_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Conference_name(ctx, field)
-			case "nameShort":
-				return ec.fieldContext_Conference_nameShort(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Conference_abbreviation(ctx, field)
-			case "active":
-				return ec.fieldContext_Conference_active(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Conference", field.Name)
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1237,11 +1237,14 @@ func (ec *executionContext) _Division_active(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Division_active(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1366,11 +1369,14 @@ func (ec *executionContext) _Franchise_locationName(ctx context.Context, field g
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Franchise_locationName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1407,11 +1413,14 @@ func (ec *executionContext) _Franchise_firstSeasonId(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Franchise_firstSeasonId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1448,11 +1457,14 @@ func (ec *executionContext) _Franchise_mostRecentTeamId(ctx context.Context, fie
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Franchise_mostRecentTeamId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3003,8 +3015,8 @@ func (ec *executionContext) fieldContext_Team_officialSiteUrl(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Team_venue(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Team_venue(ctx, field)
+func (ec *executionContext) _Team_venue_id(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Team_venue_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3017,7 +3029,7 @@ func (ec *executionContext) _Team_venue(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Venue, nil
+		return obj.VenueID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3029,36 +3041,26 @@ func (ec *executionContext) _Team_venue(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Venue)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNVenue2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Team_venue(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Team_venue_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Team",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Venue_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Venue_name(ctx, field)
-			case "city":
-				return ec.fieldContext_Venue_city(ctx, field)
-			case "timeZone":
-				return ec.fieldContext_Venue_timeZone(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Venue", field.Name)
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Team_division(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Team_division(ctx, field)
+func (ec *executionContext) _Team_division_id(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Team_division_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3071,7 +3073,7 @@ func (ec *executionContext) _Team_division(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Division, nil
+		return obj.DivisionID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3083,40 +3085,26 @@ func (ec *executionContext) _Team_division(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Division)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNDivision2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐDivision(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Team_division(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Team_division_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Team",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Division_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Division_name(ctx, field)
-			case "nameShort":
-				return ec.fieldContext_Division_nameShort(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Division_abbreviation(ctx, field)
-			case "conference":
-				return ec.fieldContext_Division_conference(ctx, field)
-			case "active":
-				return ec.fieldContext_Division_active(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Division", field.Name)
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Team_conference(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Team_conference(ctx, field)
+func (ec *executionContext) _Team_conference_id(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Team_conference_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3129,7 +3117,7 @@ func (ec *executionContext) _Team_conference(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Conference, nil
+		return obj.ConferenceID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3141,38 +3129,26 @@ func (ec *executionContext) _Team_conference(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Conference)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNConference2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐConference(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Team_conference(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Team_conference_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Team",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Conference_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Conference_name(ctx, field)
-			case "nameShort":
-				return ec.fieldContext_Conference_nameShort(ctx, field)
-			case "abbreviation":
-				return ec.fieldContext_Conference_abbreviation(ctx, field)
-			case "active":
-				return ec.fieldContext_Conference_active(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Conference", field.Name)
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Team_franchise(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Team_franchise(ctx, field)
+func (ec *executionContext) _Team_franchise_id(ctx context.Context, field graphql.CollectedField, obj *model.Team) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Team_franchise_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3185,7 +3161,7 @@ func (ec *executionContext) _Team_franchise(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Franchise, nil
+		return obj.FranchiseID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3197,31 +3173,19 @@ func (ec *executionContext) _Team_franchise(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Franchise)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNFranchise2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐFranchise(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Team_franchise(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Team_franchise_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Team",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Franchise_id(ctx, field)
-			case "teamName":
-				return ec.fieldContext_Franchise_teamName(ctx, field)
-			case "locationName":
-				return ec.fieldContext_Franchise_locationName(ctx, field)
-			case "firstSeasonId":
-				return ec.fieldContext_Franchise_firstSeasonId(ctx, field)
-			case "mostRecentTeamId":
-				return ec.fieldContext_Franchise_mostRecentTeamId(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Franchise", field.Name)
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5482,14 +5446,23 @@ func (ec *executionContext) _Conference(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = ec._Conference_nameShort(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "abbreviation":
 
 			out.Values[i] = ec._Conference_abbreviation(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "active":
 
 			out.Values[i] = ec._Conference_active(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5539,14 +5512,20 @@ func (ec *executionContext) _Division(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "conference":
+		case "conference_id":
 
-			out.Values[i] = ec._Division_conference(ctx, field, obj)
+			out.Values[i] = ec._Division_conference_id(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "active":
 
 			out.Values[i] = ec._Division_active(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5586,14 +5565,23 @@ func (ec *executionContext) _Franchise(ctx context.Context, sel ast.SelectionSet
 
 			out.Values[i] = ec._Franchise_locationName(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "firstSeasonId":
 
 			out.Values[i] = ec._Franchise_firstSeasonId(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "mostRecentTeamId":
 
 			out.Values[i] = ec._Franchise_mostRecentTeamId(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5911,30 +5899,30 @@ func (ec *executionContext) _Team(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "venue":
+		case "venue_id":
 
-			out.Values[i] = ec._Team_venue(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "division":
-
-			out.Values[i] = ec._Team_division(ctx, field, obj)
+			out.Values[i] = ec._Team_venue_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "conference":
+		case "division_id":
 
-			out.Values[i] = ec._Team_conference(ctx, field, obj)
+			out.Values[i] = ec._Team_division_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "franchise":
+		case "conference_id":
 
-			out.Values[i] = ec._Team_franchise(ctx, field, obj)
+			out.Values[i] = ec._Team_conference_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "franchise_id":
+
+			out.Values[i] = ec._Team_franchise_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -6388,36 +6376,6 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNConference2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐConference(ctx context.Context, sel ast.SelectionSet, v *model.Conference) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Conference(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDivision2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐDivision(ctx context.Context, sel ast.SelectionSet, v *model.Division) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Division(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFranchise2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐFranchise(ctx context.Context, sel ast.SelectionSet, v *model.Franchise) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Franchise(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
 	res, err := graphql.UnmarshalInt(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -6520,16 +6478,6 @@ func (ec *executionContext) marshalNTimezone2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋ
 		return graphql.Null
 	}
 	return ec._Timezone(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVenue2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v *model.Venue) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Venue(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -6809,13 +6757,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOConference2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐConference(ctx context.Context, sel ast.SelectionSet, v *model.Conference) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Conference(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {

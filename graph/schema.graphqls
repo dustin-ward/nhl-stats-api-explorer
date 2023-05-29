@@ -9,10 +9,10 @@ type Team {
 	firstYearOfPlay: Int!
 	officialSiteUrl: String!
 
-	venue: Venue!
-	division: Division!
-	conference: Conference!
-	franchise: Franchise!
+	venue_id: Int!
+	division_id: Int!
+	conference_id: Int!
+	franchise_id: Int!
 	roster: [Player!]!
 
 	active: Boolean!
@@ -21,9 +21,9 @@ type Team {
 type Franchise {
 	id: Int!
 	teamName: String!
-	locationName: String
-	firstSeasonId: Int
-	mostRecentTeamId: Int
+	locationName: String!
+	firstSeasonId: Int!
+	mostRecentTeamId: Int!
 }
 
 type Venue {
@@ -44,16 +44,16 @@ type Division {
     name: String!
     nameShort: String!
     abbreviation: String!
-    conference: Conference
-    active: Boolean
+	conference_id: Int!
+    active: Boolean!
 }
 
 type Conference {
     id: Int!
     name: String!
-    nameShort: String
-    abbreviation: String
-    active: Boolean
+    nameShort: String!
+    abbreviation: String!
+    active: Boolean!
 }
 
 type Player {

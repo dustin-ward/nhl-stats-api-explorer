@@ -3,64 +3,51 @@
 package model
 
 type Conference struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	//  Western
-	NameShort    *string `json:"nameShort"`
-	Abbreviation *string `json:"abbreviation"`
-	Active       *bool   `json:"active"`
+	ID           int    `json:"id"`
+	Name         string `json:"name"`
+	NameShort    string `json:"nameShort"`
+	Abbreviation string `json:"abbreviation"`
+	Active       bool   `json:"active"`
 }
 
 type Division struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	//  Pacific
-	NameShort string `json:"nameShort"`
-	//  PAC
+	ID           int    `json:"id"`
+	Name         string `json:"name"`
+	NameShort    string `json:"nameShort"`
 	Abbreviation string `json:"abbreviation"`
-	//  P
-	Conference *Conference `json:"conference"`
-	Active     *bool       `json:"active"`
+	ConferenceID int    `json:"conference_id"`
+	Active       bool   `json:"active"`
 }
 
 type Franchise struct {
-	ID       int    `json:"id"`
-	TeamName string `json:"teamName"`
-	//  Oilers
-	LocationName     *string `json:"locationName"`
-	FirstSeasonID    *int    `json:"firstSeasonId"`
-	MostRecentTeamID *int    `json:"mostRecentTeamId"`
+	ID               int    `json:"id"`
+	TeamName         string `json:"teamName"`
+	LocationName     string `json:"locationName"`
+	FirstSeasonID    int    `json:"firstSeasonId"`
+	MostRecentTeamID int    `json:"mostRecentTeamId"`
 }
 
 type Player struct {
-	ID       int    `json:"id"`
-	FullName string `json:"fullName"`
-	//  Ryan Nugent-Hopkins
-	FirstName string `json:"firstName"`
-	//  Ryan
-	LastName string `json:"lastName"`
-	//  Nugent-Hopkins
-	PrimaryNumber int `json:"primaryNumber"`
-	//  93
-	CurrentAge int    `json:"currentAge"`
-	Height     string `json:"height"`
-	//  6' 0\"
-	Weight int `json:"weight"`
-	//  195
-	BirthDate          string  `json:"birthDate"`
-	BirthCity          *string `json:"birthCity"`
-	BirthStateProvince *string `json:"birthStateProvince"`
-	BirthCountry       *string `json:"birthCountry"`
-	Nationality        string  `json:"nationality"`
-	Captain            bool    `json:"captain"`
-	AlternateCaptain   bool    `json:"alternateCaptain"`
-	ShootsCatches      string  `json:"shootsCatches"`
-	//  L
-	RosterStatus string `json:"rosterStatus"`
-	//  Y
-	CurrentTeam *int      `json:"currentTeam"`
-	Position    *Position `json:"position"`
-	Active      bool      `json:"active"`
+	ID                 int       `json:"id"`
+	FullName           string    `json:"fullName"`
+	FirstName          string    `json:"firstName"`
+	LastName           string    `json:"lastName"`
+	PrimaryNumber      int       `json:"primaryNumber"`
+	CurrentAge         int       `json:"currentAge"`
+	Height             string    `json:"height"`
+	Weight             int       `json:"weight"`
+	BirthDate          string    `json:"birthDate"`
+	BirthCity          *string   `json:"birthCity"`
+	BirthStateProvince *string   `json:"birthStateProvince"`
+	BirthCountry       *string   `json:"birthCountry"`
+	Nationality        string    `json:"nationality"`
+	Captain            bool      `json:"captain"`
+	AlternateCaptain   bool      `json:"alternateCaptain"`
+	ShootsCatches      string    `json:"shootsCatches"`
+	RosterStatus       string    `json:"rosterStatus"`
+	CurrentTeam        *int      `json:"currentTeam"`
+	Position           *Position `json:"position"`
+	Active             bool      `json:"active"`
 }
 
 type Position struct {
@@ -71,42 +58,31 @@ type Position struct {
 }
 
 type Team struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	//  Edmonton Oilers
-	TeamName string `json:"teamName"`
-	//  Oilers
-	ShortName string `json:"shortName"`
-	//  Edmonton
-	Abbreviation string `json:"abbreviation"`
-	//  EDM
-	LocationName string `json:"locationName"`
-	//  Edmonton
-	FirstYearOfPlay int `json:"firstYearOfPlay"`
-	//  1979
-	OfficialSiteURL string `json:"officialSiteUrl"`
-	//  https://www.edmontonoilers.com/
-	Venue      *Venue      `json:"venue"`
-	Division   *Division   `json:"division"`
-	Conference *Conference `json:"conference"`
-	Franchise  *Franchise  `json:"franchise"`
-	Roster     []*Player   `json:"roster"`
-	Active     bool        `json:"active"`
+	ID              int       `json:"id"`
+	Name            string    `json:"name"`
+	TeamName        string    `json:"teamName"`
+	ShortName       string    `json:"shortName"`
+	Abbreviation    string    `json:"abbreviation"`
+	LocationName    string    `json:"locationName"`
+	FirstYearOfPlay int       `json:"firstYearOfPlay"`
+	OfficialSiteURL string    `json:"officialSiteUrl"`
+	VenueID         int       `json:"venue_id"`
+	DivisionID      int       `json:"division_id"`
+	ConferenceID    int       `json:"conference_id"`
+	FranchiseID     int       `json:"franchise_id"`
+	Roster          []*Player `json:"roster"`
+	Active          bool      `json:"active"`
 }
 
 type Timezone struct {
-	ID string `json:"id"`
-	//  America/Edmonton
-	Offset int `json:"offset"`
-	//  -6
-	Tz string `json:"tz"`
+	ID     string `json:"id"`
+	Offset int    `json:"offset"`
+	Tz     string `json:"tz"`
 }
 
 type Venue struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	//  Rogers Place
-	City string `json:"city"`
-	//  Edmonton
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	City     string    `json:"city"`
 	TimeZone *Timezone `json:"timeZone"`
 }
