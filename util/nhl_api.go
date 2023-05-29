@@ -36,7 +36,7 @@ func queryNHLStats(endpoint string) (any, error) {
 func GetTeams() ([]*model.Team, error) {
 	teams := make([]*model.Team, 0)
 
-	r, err := queryNHLStats("/api/v1/teams")
+	r, err := queryNHLStats("/api/v1/teams?expand=team.roster")
 	if err != nil {
 		return teams, err
 	}

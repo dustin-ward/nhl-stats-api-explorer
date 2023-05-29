@@ -4,6 +4,8 @@ package graph
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
+import "dustin-ward/NHLGraphQLAPI/graph/model"
+
 type Resolver struct {
 	teams       map[int]*model.Team
 	franchises  map[int]*model.Franchise
