@@ -123,10 +123,11 @@ type ComplexityRoot struct {
 	}
 
 	Venue struct {
-		City     func(childComplexity int) int
-		ID       func(childComplexity int) int
-		Name     func(childComplexity int) int
-		TimeZone func(childComplexity int) int
+		Appenabled func(childComplexity int) int
+		City       func(childComplexity int) int
+		ID         func(childComplexity int) int
+		Name       func(childComplexity int) int
+		TimeZone   func(childComplexity int) int
 	}
 }
 
@@ -544,6 +545,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Timezone.Tz(childComplexity), true
 
+	case "Venue.appenabled":
+		if e.complexity.Venue.Appenabled == nil {
+			break
+		}
+
+		return e.complexity.Venue.Appenabled(childComplexity), true
+
 	case "Venue.city":
 		if e.complexity.Venue.City == nil {
 			break
@@ -655,8 +663,9 @@ type Franchise {
 type Venue {
 	id: Int!
 	name: String!
-	city: String!
-	timeZone: Timezone!
+	city: String
+	timeZone: Timezone
+	appenabled: Boolean
 }
 
 type Timezone {
@@ -3562,14 +3571,11 @@ func (ec *executionContext) _Venue_city(ctx context.Context, field graphql.Colle
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Venue_city(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3606,14 +3612,11 @@ func (ec *executionContext) _Venue_timeZone(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Timezone)
 	fc.Result = res
-	return ec.marshalNTimezone2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐTimezone(ctx, field.Selections, res)
+	return ec.marshalOTimezone2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐTimezone(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Venue_timeZone(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3632,6 +3635,47 @@ func (ec *executionContext) fieldContext_Venue_timeZone(ctx context.Context, fie
 				return ec.fieldContext_Timezone_tz(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Timezone", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Venue_appenabled(ctx context.Context, field graphql.CollectedField, obj *model.Venue) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Venue_appenabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Appenabled, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Venue_appenabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Venue",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -6022,16 +6066,14 @@ func (ec *executionContext) _Venue(ctx context.Context, sel ast.SelectionSet, ob
 
 			out.Values[i] = ec._Venue_city(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "timeZone":
 
 			out.Values[i] = ec._Venue_timeZone(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
+		case "appenabled":
+
+			out.Values[i] = ec._Venue_appenabled(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6470,16 +6512,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTimezone2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐTimezone(ctx context.Context, sel ast.SelectionSet, v *model.Timezone) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Timezone(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
 	return ec.___Directive(ctx, sel, &v)
 }
@@ -6789,6 +6821,13 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOTimezone2ᚖdustinᚑwardᚋNHLGraphQLAPIᚋgraphᚋmodelᚐTimezone(ctx context.Context, sel ast.SelectionSet, v *model.Timezone) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Timezone(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

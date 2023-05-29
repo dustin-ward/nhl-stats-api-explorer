@@ -29,8 +29,9 @@ type Franchise {
 type Venue {
 	id: Int!
 	name: String!
-	city: String!
-	timeZone: Timezone!
+	city: String
+	timeZone: Timezone
+	appenabled: Boolean
 }
 
 type Timezone {

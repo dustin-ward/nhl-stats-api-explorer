@@ -81,8 +81,9 @@ type Timezone struct {
 }
 
 type Venue struct {
-	ID       int       `json:"id"`
-	Name     string    `json:"name"`
-	City     string    `json:"city"`
-	TimeZone *Timezone `json:"timeZone"`
+	ID         int       `json:"id"`
+	Name       string    `json:"name"`
+	City       *string   `json:"city"`
+	TimeZone   *Timezone `json:"timeZone"`
+	Appenabled *bool     `json:"appenabled"`
 }

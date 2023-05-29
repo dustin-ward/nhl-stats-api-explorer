@@ -74,3 +74,25 @@ func GetTeams() (map[int]*model.Team, error) {
 
 	return teams, nil
 }
+
+func GetVenues() (map[int]*model.Venue, error) {
+	venues := make(map[int]*model.Venue, 0)
+
+	data, err := queryNHLStats("/api/v1/venues")
+	if err != nil {
+		return venues, err
+	}
+
+	// Parse raw JSON for each venue
+	venues_json := data.(map[string]any)["venues"]
+	for _,v := range venues_json.([]any) {
+		v_json := v.(map[string]any)
+		id := (int)(v_json["id"].(float64))
+		venues[id] = &model.Venue{
+			ID: (int)(v_json["id"].(float64)),
+			Name: v_json["name"].(string),
+		}
+	}
+
+	return venues, nil
+}
