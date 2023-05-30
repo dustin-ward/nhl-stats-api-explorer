@@ -32,7 +32,7 @@ type Player struct {
 	FullName           string    `json:"fullName"`
 	FirstName          string    `json:"firstName"`
 	LastName           string    `json:"lastName"`
-	PrimaryNumber      int       `json:"primaryNumber"`
+	PrimaryNumber      string    `json:"primaryNumber"`
 	CurrentAge         int       `json:"currentAge"`
 	Height             string    `json:"height"`
 	Weight             int       `json:"weight"`
@@ -41,13 +41,14 @@ type Player struct {
 	BirthStateProvince *string   `json:"birthStateProvince"`
 	BirthCountry       *string   `json:"birthCountry"`
 	Nationality        string    `json:"nationality"`
-	Captain            bool      `json:"captain"`
-	AlternateCaptain   bool      `json:"alternateCaptain"`
+	Active             bool      `json:"active"`
+	Captain            *bool     `json:"captain"`
+	AlternateCaptain   *bool     `json:"alternateCaptain"`
 	ShootsCatches      string    `json:"shootsCatches"`
 	RosterStatus       string    `json:"rosterStatus"`
+	Rookie             bool      `json:"rookie"`
 	CurrentTeam        *int      `json:"currentTeam"`
 	Position           *Position `json:"position"`
-	Active             bool      `json:"active"`
 }
 
 type Position struct {

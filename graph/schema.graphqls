@@ -62,7 +62,7 @@ type Player {
     fullName: String!
 	firstName: String!
 	lastName: String!
-    primaryNumber: Int!
+    primaryNumber: String!
 	currentAge: Int!
 	height: String!
 	weight: Int!
@@ -73,15 +73,15 @@ type Player {
 	birthCountry: String
 	nationality: String!
 
-    captain: Boolean!
-	alternateCaptain: Boolean!
+	active: Boolean!
+    captain: Boolean
+	alternateCaptain: Boolean
     shootsCatches: String!
     rosterStatus: String!
+	rookie: Boolean!
     currentTeam: Int
 	
 	position: Position!
-
-    active: Boolean!
 }
 
 type Position {

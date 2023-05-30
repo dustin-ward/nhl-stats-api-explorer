@@ -84,6 +84,7 @@ type ComplexityRoot struct {
 		Nationality        func(childComplexity int) int
 		Position           func(childComplexity int) int
 		PrimaryNumber      func(childComplexity int) int
+		Rookie             func(childComplexity int) int
 		RosterStatus       func(childComplexity int) int
 		ShootsCatches      func(childComplexity int) int
 		Weight             func(childComplexity int) int
@@ -376,6 +377,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Player.PrimaryNumber(childComplexity), true
+
+	case "Player.rookie":
+		if e.complexity.Player.Rookie == nil {
+			break
+		}
+
+		return e.complexity.Player.Rookie(childComplexity), true
 
 	case "Player.rosterStatus":
 		if e.complexity.Player.RosterStatus == nil {
@@ -696,7 +704,7 @@ type Player {
     fullName: String!
 	firstName: String!
 	lastName: String!
-    primaryNumber: Int!
+    primaryNumber: String!
 	currentAge: Int!
 	height: String!
 	weight: Int!
@@ -707,15 +715,15 @@ type Player {
 	birthCountry: String
 	nationality: String!
 
-    captain: Boolean!
-	alternateCaptain: Boolean!
+	active: Boolean!
+    captain: Boolean
+	alternateCaptain: Boolean
     shootsCatches: String!
     rosterStatus: String!
+	rookie: Boolean!
     currentTeam: Int
 	
 	position: Position!
-
-    active: Boolean!
 }
 
 type Position {
@@ -1691,9 +1699,9 @@ func (ec *executionContext) _Player_primaryNumber(ctx context.Context, field gra
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Player_primaryNumber(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1703,7 +1711,7 @@ func (ec *executionContext) fieldContext_Player_primaryNumber(ctx context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2052,6 +2060,50 @@ func (ec *executionContext) fieldContext_Player_nationality(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Player_active(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Player_active(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Active, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Player_active(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Player",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Player_captain(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Player_captain(ctx, field)
 	if err != nil {
@@ -2073,14 +2125,11 @@ func (ec *executionContext) _Player_captain(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*bool)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Player_captain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2117,14 +2166,11 @@ func (ec *executionContext) _Player_alternateCaptain(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*bool)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Player_alternateCaptain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2228,6 +2274,50 @@ func (ec *executionContext) fieldContext_Player_rosterStatus(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Player_rookie(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Player_rookie(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Rookie, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Player_rookie(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Player",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Player_currentTeam(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Player_currentTeam(ctx, field)
 	if err != nil {
@@ -2318,50 +2408,6 @@ func (ec *executionContext) fieldContext_Player_position(ctx context.Context, fi
 				return ec.fieldContext_Position_abbreviation(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Position", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Player_active(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Player_active(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Active, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Player_active(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Player",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3265,6 +3311,8 @@ func (ec *executionContext) fieldContext_Team_roster(ctx context.Context, field 
 				return ec.fieldContext_Player_birthCountry(ctx, field)
 			case "nationality":
 				return ec.fieldContext_Player_nationality(ctx, field)
+			case "active":
+				return ec.fieldContext_Player_active(ctx, field)
 			case "captain":
 				return ec.fieldContext_Player_captain(ctx, field)
 			case "alternateCaptain":
@@ -3273,12 +3321,12 @@ func (ec *executionContext) fieldContext_Team_roster(ctx context.Context, field 
 				return ec.fieldContext_Player_shootsCatches(ctx, field)
 			case "rosterStatus":
 				return ec.fieldContext_Player_rosterStatus(ctx, field)
+			case "rookie":
+				return ec.fieldContext_Player_rookie(ctx, field)
 			case "currentTeam":
 				return ec.fieldContext_Player_currentTeam(ctx, field)
 			case "position":
 				return ec.fieldContext_Player_position(ctx, field)
-			case "active":
-				return ec.fieldContext_Player_active(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Player", field.Name)
 		},
@@ -5729,20 +5777,21 @@ func (ec *executionContext) _Player(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "active":
+
+			out.Values[i] = ec._Player_active(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "captain":
 
 			out.Values[i] = ec._Player_captain(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "alternateCaptain":
 
 			out.Values[i] = ec._Player_alternateCaptain(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "shootsCatches":
 
 			out.Values[i] = ec._Player_shootsCatches(ctx, field, obj)
@@ -5757,6 +5806,13 @@ func (ec *executionContext) _Player(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "rookie":
+
+			out.Values[i] = ec._Player_rookie(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "currentTeam":
 
 			out.Values[i] = ec._Player_currentTeam(ctx, field, obj)
@@ -5764,13 +5820,6 @@ func (ec *executionContext) _Player(ctx context.Context, sel ast.SelectionSet, o
 		case "position":
 
 			out.Values[i] = ec._Player_position(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "active":
-
-			out.Values[i] = ec._Player_active(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

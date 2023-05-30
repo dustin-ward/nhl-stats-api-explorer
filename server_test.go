@@ -236,3 +236,101 @@ func TestGetDivisions(t *testing.T) {
 		return
 	}
 }
+
+func TestGetPlayer(t *testing.T) {
+	const (
+		ID = 8476454
+		FULLNAME = "Ryan Nugent-Hopkins"
+		FIRSTNAME = "Ryan"
+		LASTNAME = "Nugent-Hopkins"
+		NUMBER = "93"
+		BIRTHDATE = "1993-04-12"
+		CURAGE = 30
+		BIRTHCITY = "Burnaby"
+		BIRTHPROVINCE = "BC"
+		BIRTHCOUNTRY = "CAN"
+		NATIONALITY = "CAN"
+		HEIGHT = "6' 0\""
+		WEIGHT = 195
+		ACTIVE = true
+		CAPTAIN = false
+		ALTERNATE = true
+		ROOKIE = false
+		ROSTER = "Y"
+		SHOOTS = "L"
+		CUR_TEAM = 22
+		POS_CODE = "C"
+		POS_NAME = "Center"
+		POS_TYPE = "Forward"
+		POS_ABBR = "C"
+	)
+
+	player, err := util.GetPlayer(ID)
+	if err != nil {
+		t.Errorf("unable to get player %d", ID)
+	}
+
+	if player.FullName != FULLNAME {
+		t.Errorf("player.FullName != %s, actually: %s", player.FullName, FULLNAME)
+	}
+	if player.FirstName != FIRSTNAME {
+		t.Errorf("player.FirstName != %s, actually: %s", player.FirstName, FIRSTNAME)
+	}
+	if player.LastName != LASTNAME {
+		t.Errorf("player.LastName != %s, actually: %s", player.LastName, LASTNAME)
+	}
+	if player.CurrentAge != CURAGE {
+		t.Errorf("player.CurrentAge != %d, actually: %d", player.CurrentAge, CURAGE)
+	}
+	if player.PrimaryNumber != NUMBER {
+		t.Errorf("player.PrimaryNumber != %s, actually: %s", player.PrimaryNumber, NUMBER)
+	}
+	if player.BirthDate != BIRTHDATE {
+		t.Errorf("player.BirthDate != %s, actually: %s", player.BirthDate, BIRTHDATE)
+	}
+	if *player.BirthCity != BIRTHCITY {
+		t.Errorf("player.BirthCity != %s, actually: %s", *player.BirthCity, BIRTHCITY)
+	}
+	if *player.BirthStateProvince != BIRTHPROVINCE {
+		t.Errorf("player.BirthStateProvince != %s, actually: %s", *player.BirthStateProvince, BIRTHPROVINCE)
+	}
+	if *player.BirthCountry != BIRTHCOUNTRY {
+		t.Errorf("player.BirthCountry != %s, actually: %s", *player.BirthCountry, BIRTHCOUNTRY)
+	}
+	if player.Nationality != NATIONALITY {
+		t.Errorf("player.Nationality != %s, actually: %s", player.Nationality, NATIONALITY)
+	}
+	if player.Height != HEIGHT {
+		t.Errorf("player.Height != %s, actually: %s", player.Height, HEIGHT)
+	}
+	if player.Weight != WEIGHT {
+		t.Errorf("player.Weight != %d, actually: %d", player.Weight, WEIGHT)
+	}
+	if player.Active != ACTIVE {
+		t.Errorf("player.Active != %v, actually: %v", player.Active, ACTIVE)
+	}
+	if *player.Captain != CAPTAIN {
+		t.Errorf("player.Captain != %v, actually: %v", *player.Captain, CAPTAIN)
+	}
+	if *player.AlternateCaptain != ALTERNATE {
+		t.Errorf("player.AlternateCaptain != %v, actually: %v", *player.AlternateCaptain, ALTERNATE)
+	}
+	if player.Rookie != ROOKIE {
+		t.Errorf("player.Rookie != %v, actually: %v", player.Rookie, ROOKIE)
+	}
+	if player.RosterStatus != ROSTER {
+		t.Errorf("player.RosterStatus != %s, actually: %s", player.RosterStatus, ROSTER)
+	}
+	if *player.CurrentTeam != CUR_TEAM {
+		t.Errorf("player.CurrentTeam != %d, actually: %d", *player.CurrentTeam, CUR_TEAM)
+	}
+	if player.Position.Code != POS_CODE {
+		t.Errorf("player.Position.Code != %s, actually: %s", player.Position.Code, POS_CODE)
+	}
+	if player.Position.Name != POS_NAME {
+		t.Errorf("player.Position.Name != %s, actually: %s", player.Position.Name, POS_NAME)
+	}
+	if player.Position.Type != POS_TYPE {
+		t.Errorf("player.Position.Type != %s, actually: %s", player.Position.Type, POS_TYPE)
+	}
+}

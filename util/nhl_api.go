@@ -148,3 +148,52 @@ func GetDivisions() (map[int]*model.Division, error) {
 	return divisions, nil
 }
 
+func GetPlayer(id int) (*model.Player, error) {
+	data, err := queryNHLStats("/api/v1/people/" + strconv.Itoa(id))
+	if err != nil {
+		return &model.Player{}, nil
+	}
+
+	json := data.(map[string]any)["people"].([]any)[0].(map[string]any)
+	player := &model.Player{
+		ID: id,
+		FullName: json["fullName"].(string),
+		FirstName: json["firstName"].(string),
+		LastName: json["lastName"].(string),
+		PrimaryNumber: json["primaryNumber"].(string),
+		CurrentAge: (int)(json["currentAge"].(float64)),
+		BirthDate: json["birthDate"].(string),
+		Nationality: json["nationality"].(string),
+		Height: json["height"].(string),
+		Weight: (int)(json["weight"].(float64)),
+		Active: json["active"].(bool),
+		Rookie: json["rookie"].(bool),
+		RosterStatus: json["rosterStatus"].(string),
+		Position: &model.Position{
+			Code: json["primaryPosition"].(map[string]any)["code"].(string),
+			Name: json["primaryPosition"].(map[string]any)["name"].(string),
+			Type: json["primaryPosition"].(map[string]any)["type"].(string),
+			Abbreviation: json["primaryPosition"].(map[string]any)["abbreviation"].(string),
+		},
+	}
+
+	// Annoying type conversions cant be done inline?
+	b_city := json["birthCity"].(string)
+	player.BirthCity = &b_city
+	b_sp := json["birthStateProvince"].(string)
+	player.BirthStateProvince = &b_sp
+	b_cnt := json["birthCountry"].(string)
+	player.BirthCountry = &b_cnt
+	cptn := json["captain"].(bool)
+	player.Captain = &cptn
+	alt := json["alternateCaptain"].(bool)
+	player.AlternateCaptain = &alt
+
+	// Can be nil
+	if json["currentTeam"] != nil {
+		t_id := (int)(json["currentTeam"].(map[string]any)["id"].(float64))
+		player.CurrentTeam = &t_id
+	}
+
+	return player, nil
+}
