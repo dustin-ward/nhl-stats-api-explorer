@@ -48,7 +48,7 @@ func GetTeams() (map[int]*model.Team, error) {
 		t_json := t.(map[string]any)
 		id := (int)(t_json["id"].(float64))
 		teams[id] = &model.Team{
-			ID: (int)(t_json["id"].(float64)),
+			ID: id,
 			Name: t_json["name"].(string),
 			TeamName: t_json["teamName"].(string),
 			LocationName: t_json["locationName"].(string),
@@ -89,10 +89,62 @@ func GetVenues() (map[int]*model.Venue, error) {
 		v_json := v.(map[string]any)
 		id := (int)(v_json["id"].(float64))
 		venues[id] = &model.Venue{
-			ID: (int)(v_json["id"].(float64)),
+			ID: id,
 			Name: v_json["name"].(string),
 		}
 	}
 
 	return venues, nil
 }
+
+func GetConferences() (map[int]*model.Conference, error) {
+	conferences := make(map[int]*model.Conference, 0)
+
+	data, err := queryNHLStats("/api/v1/conferences")
+	if err != nil {
+		return conferences, err
+	}
+
+	// Parse raw JSON for each conference
+	conferences_json := data.(map[string]any)["conferences"]
+	for _,v := range conferences_json.([]any) {
+		v_json := v.(map[string]any)
+		id := (int)(v_json["id"].(float64))
+		conferences[id] = &model.Conference{
+			ID: id,
+			Name: v_json["name"].(string),
+			Abbreviation: v_json["abbreviation"].(string),
+			NameShort: v_json["shortName"].(string),
+			Active: v_json["active"].(bool),
+		}
+	}
+
+	return conferences, nil
+}
+
+func GetDivisions() (map[int]*model.Division, error) {
+	divisions := make(map[int]*model.Division, 0)
+
+	data, err := queryNHLStats("/api/v1/divisions")
+	if err != nil {
+		return divisions, err
+	}
+
+	// Parse raw JSON for each division
+	divisions_json := data.(map[string]any)["divisions"]
+	for _,v := range divisions_json.([]any) {
+		v_json := v.(map[string]any)
+		id := (int)(v_json["id"].(float64))
+		divisions[id] = &model.Division{
+			ID: id,
+			Name: v_json["name"].(string),
+			Abbreviation: v_json["abbreviation"].(string),
+			NameShort: v_json["nameShort"].(string),
+			ConferenceID: (int)(v_json["conference"].(map[string]any)["id"].(float64)),
+			Active: v_json["active"].(bool),
+		}
+	}
+
+	return divisions, nil
+}
+
